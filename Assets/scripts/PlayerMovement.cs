@@ -14,6 +14,7 @@ public class PlayerMovement : MonoBehaviour
     float jumpHeight = 3.0f;
     float jumpTime = 0.5f;
     float initialJumpVelocity;
+    int jumpsRemaining;
 
     private void Start()
     {
@@ -50,9 +51,20 @@ public class PlayerMovement : MonoBehaviour
             yVelocity = yVelocityWhenGrounded;
         }
 
-        if(Input.GetButtonDown("Jump") && charController.isGrounded)
+        if(Input.GetButtonDown("Jump"))
         {
-            yVelocity = initialJumpVelocity;
+            if (charController.isGrounded)
+            {
+                // player can make 2 jumps from ground
+                jumpsRemaining = 2;
+            }
+            
+            // player will need to come to ground before jumping again
+            if(jumpsRemaining != 0)
+            {
+                yVelocity = initialJumpVelocity;
+                jumpsRemaining -= 1;
+            }  
         }
 
         movement.y = yVelocity;
@@ -64,5 +76,16 @@ public class PlayerMovement : MonoBehaviour
 
         Vector3 rotation = Vector3.up * rotSpeed * Time.deltaTime * Input.GetAxis("Mouse X");
         transform.Rotate(rotation);
+    }
+
+    // Respawn the player at set position
+    public void Respawn(Vector3 spawnPoint)
+    {
+        // stop falling
+        yVelocity = yVelocityWhenGrounded;
+        // set the player to a given position
+        transform.position = spawnPoint;
+        // apply transform changes to the physics engine manually
+        Physics.SyncTransforms();
     }
 }
