@@ -5,7 +5,7 @@ using UnityEngine;
 public class PlayerMovement : MonoBehaviour
 {
     float speed = 6f;
-    float rotSpeed = 600f; // deg per sec
+    float rotSpeed = 720f; // deg per sec
     [SerializeField]
     private CharacterController charController;
     float gravity = -9.81f;
